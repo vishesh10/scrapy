@@ -1004,9 +1004,7 @@ class MySpider(scrapy.Spider):
             opts.output = ["example.json"]
 
             command.validate_feed_exporter(opts)
-            expected = (
-                "Either 'FeedExporter' extension or its subclass must be enabled for Feed Exports to work."
-            )
+            expected = "Either 'FeedExporter' extension or its subclass must be enabled for Feed Exports to work."
             self.assertTrue(any(expected in str for str in cm.output))
 
 
@@ -1096,9 +1094,7 @@ class MySpider(scrapy.Spider):
             opts.output = ["example.json"]
 
             command.validate_feed_exporter(opts)
-            expected = (
-                "Either 'FeedExporter' extension or its subclass must be enabled for Feed Exports to work."
-            )
+            expected = "Either 'FeedExporter' extension or its subclass must be enabled for Feed Exports to work."
             self.assertTrue(any(expected in str for str in cm.output))
 
     def test_output(self):

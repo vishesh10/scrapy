@@ -22,7 +22,6 @@ from scrapy.utils.conf import (
 )
 from scrapy.utils.misc import load_object
 
-
 logger = logging.getLogger(__name__)
 
 
@@ -191,14 +190,18 @@ class BaseRunSpiderCommand(ScrapyCommand):
 
     def validate_feed_exporter(self, opts):
         if opts.output:
-            default_extensions = [e for e in EXTENSIONS_BASE.keys() if e not in ['scrapy.extensions.feedexport.FeedExporter']]
+            default_extensions = [
+                e
+                for e in EXTENSIONS_BASE.keys()
+                if e not in ["scrapy.extensions.feedexport.FeedExporter"]
+            ]
             extensions = build_component_list(self.settings.getwithbase("EXTENSIONS"))
             raise_warning = True
 
-            for ext in extensions:          
-                if ext not in default_extensions: 
+            for ext in extensions:
+                if ext not in default_extensions:
                     ext_cls = load_object(ext)
-                    if issubclass(ext_cls, FeedExporter):                    
+                    if issubclass(ext_cls, FeedExporter):
                         raise_warning = False
                         break
 
