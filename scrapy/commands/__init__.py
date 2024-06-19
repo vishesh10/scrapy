@@ -192,7 +192,7 @@ class BaseRunSpiderCommand(ScrapyCommand):
         if opts.output:
             default_extensions = [
                 e
-                for e in EXTENSIONS_BASE.keys()
+                for e in EXTENSIONS_BASE
                 if e not in ["scrapy.extensions.feedexport.FeedExporter"]
             ]
             extensions = build_component_list(self.settings.getwithbase("EXTENSIONS"))
