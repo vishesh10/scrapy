@@ -22,7 +22,6 @@ from twisted.trial import unittest
 import scrapy
 from scrapy.commands import ScrapyCommand, ScrapyHelpFormatter, crawl, runspider, view
 from scrapy.commands.startproject import IGNORE
-from scrapy.crawler import CrawlerProcess
 from scrapy.settings import Settings
 from scrapy.utils.python import to_unicode
 from scrapy.utils.test import get_testenv
@@ -1006,7 +1005,7 @@ class MySpider(scrapy.Spider):
 
             command.validate_feed_exporter(opts)
             expected = (
-                "'FeedExporter' extension must be enabled for Feed Exports to work."
+                "Either 'FeedExporter' extension or its subclass must be enabled for Feed Exports to work."
             )
             self.assertTrue(any(expected in str for str in cm.output))
 
@@ -1093,13 +1092,12 @@ class MySpider(scrapy.Spider):
             )
             command.add_options(parser)
             opts, _ = parser.parse_known_args(args=[])
-            command.crawler_process = CrawlerProcess(settings)
 
             opts.output = ["example.json"]
 
             command.validate_feed_exporter(opts)
             expected = (
-                "'FeedExporter' extension must be enabled for Feed Exports to work."
+                "Either 'FeedExporter' extension or its subclass must be enabled for Feed Exports to work."
             )
             self.assertTrue(any(expected in str for str in cm.output))
 

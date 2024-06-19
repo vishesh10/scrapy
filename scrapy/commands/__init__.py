@@ -13,11 +13,15 @@ from twisted.python import failure
 
 from scrapy.crawler import Crawler, CrawlerProcess
 from scrapy.exceptions import UsageError
+from scrapy.extensions.feedexport import FeedExporter
+from scrapy.settings.default_settings import EXTENSIONS_BASE
 from scrapy.utils.conf import (
     arglist_to_dict,
     build_component_list,
     feed_process_params_from_cli,
 )
+from scrapy.utils.misc import load_object
+
 
 logger = logging.getLogger(__name__)
 
@@ -186,13 +190,21 @@ class BaseRunSpiderCommand(ScrapyCommand):
             self.settings.set("FEEDS", feeds, priority="cmdline")
 
     def validate_feed_exporter(self, opts):
-        feed_eport_key = "scrapy.extensions.feedexport.FeedExporter"
-
         if opts.output:
+            default_extensions = [e for e in EXTENSIONS_BASE.keys() if e not in ['scrapy.extensions.feedexport.FeedExporter']]
             extensions = build_component_list(self.settings.getwithbase("EXTENSIONS"))
-            if feed_eport_key not in extensions:
+            raise_warning = True
+
+            for ext in extensions:          
+                if ext not in default_extensions: 
+                    ext_cls = load_object(ext)
+                    if issubclass(ext_cls, FeedExporter):                    
+                        raise_warning = False
+                        break
+
+            if raise_warning:
                 logger.warning(
-                    "'FeedExporter' extension must be enabled for Feed Exports to work."
+                    "Either 'FeedExporter' extension or its subclass must be enabled for Feed Exports to work."
                 )
 
 
